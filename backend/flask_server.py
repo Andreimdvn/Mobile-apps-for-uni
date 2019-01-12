@@ -48,9 +48,9 @@ class FlaskServer:
         return json.dumps("Hello world! Got req: {}".format(self.request_data))
 
     def login(self):
-        request_data = json.loads(request.get_json())
+        request_data = request.get_json()
         self.logger.info("Got login request. Data: {}".format(request_data))
-        status = self.db.login_user(request_data["user"], request_data["password"])
+        status, token = self.db.login_user(request_data["user"], request_data["password"])
         self.logger.debug("Login status: {}".format(status))
 
-        return json.dumps({'status': status})
+        return json.dumps({'status': str(status), 'token': token})

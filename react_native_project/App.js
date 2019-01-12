@@ -3,11 +3,25 @@ import {View, Text, Button, KeyboardAvoidingView, Image, StyleSheet, TextInput} 
 import { createAppContainer, createStackNavigator, StackActions, NavigationActions } from 'react-navigation';
 import {LoginScreen} from './Components/Login';
 
+
+global.server_host = "asd";
+
 class DetailsScreen extends React.Component {
   render(){
     return (
         <View style={styles.homeStyles}>
           <Text >Keep it!</Text>
+          <Button
+              onPress={()=>{this.props.navigation.dispatch(StackActions.reset({
+              index: 0,
+              actions: [
+              NavigationActions.navigate({ routeName: 'Home' })
+              ],
+              }))}}
+              title="Logout"
+              color="#2980b9"
+              accessibilityLabel="Logout"
+          />
         </View>
     )
   }

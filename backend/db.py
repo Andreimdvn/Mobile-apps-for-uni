@@ -18,7 +18,6 @@ class Db:
         self.logger = logging.getLogger()
         self.logger.debug("Mysql Connection initialised! {}".format(self.mydb))
 
-
     def login_user(self, user, password):
         mycursor = self.mydb.cursor()
         args = (user, password)
@@ -27,5 +26,5 @@ class Db:
         result = mycursor.fetchone()
         self.logger.debug("Checking user {}. Result: {}".format(user, result))
         if result:
-            return True
-        return False
+            return True, result[0]
+        return False, -1
