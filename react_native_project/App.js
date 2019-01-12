@@ -47,22 +47,24 @@ class DetailsScreen extends React.Component {
 
         if (list_data !== null) {
             console.log("We have data in storage. Will load it!");
-            this.setState(list_data);
+            let data_from_storage = JSON.parse(list_data);
+            this.setState({list_data: data_from_storage});
+            console.log("Data was loaded from storage")
         }
         else {
             console.log("No data in storage!");
         }
-
-        const fetched_list_data =  await this.fetchListData();
+        console.log("Request to getch list data");
+        let fetched_list_data =  await this.fetchListData();
         try {
             this.setState({list_data: fetched_list_data});
-            let saveListData = async  fetched_list_data=> {
+            let saveListData = async  wtf=> {
                 try {
                     console.log("Will add 'list_data 'to local storage!");
-                    await AsyncStorage.setItem('list_data', fetched_list_data);
+                    await AsyncStorage.setItem('list_data', JSON.stringify(fetched_list_data));
                     console.log("Added 'list_data 'to local storage!");
                 } catch (error) {
-                    console.log("asyncstorage error at save login_token");
+                    console.log("asyncstorage error at save list_data: "+ error);
                 }
             };
             await saveListData();

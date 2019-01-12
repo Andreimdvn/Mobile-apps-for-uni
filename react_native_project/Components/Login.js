@@ -95,13 +95,13 @@ export class LoginScreen extends React.Component {
                 .then(async (responseJson) => {
                     let loginToken = responseJson['token'];
                     if (responseJson['status'] === 'True') {
-                        let saveLoginToken = async loginToken => {
+                        let saveLoginToken = async wtf => {
                             try {
                                 console.log("Will add login token to local storage!");
                                 await AsyncStorage.setItem('login_token', loginToken);
                                 console.log("Added login_token to local storage!");
                             } catch (error) {
-                                console.log("asyncstorage error at save login_token")
+                                console.log("asyncstorage error at save login_token: " + error.message)
                             }
                         };
                         await saveLoginToken();
