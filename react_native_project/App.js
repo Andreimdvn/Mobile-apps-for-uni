@@ -8,7 +8,7 @@ import { AsyncStorage } from "react-native"
 class DetailsScreen extends React.Component {
         async fetchListData() {
         try {
-            let response = await fetch('http://10.220.16.45:16000/api/listdata',
+            let response = await fetch('http://localhost:16000/api/listdata',
             { method: 'POST',
               headers: {
              'Content-Type': 'application/json',

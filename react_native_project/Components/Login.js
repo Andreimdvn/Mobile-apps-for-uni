@@ -80,7 +80,7 @@ export class LoginScreen extends React.Component {
 
         console.log("Sending login req!");
         try {
-            fetch('http://10.220.16.45:16000/api/login', {
+            fetch('http://localhost:16000/api/login', {
                 method: 'POST',
                 timeout: 5,
                 headers: {
