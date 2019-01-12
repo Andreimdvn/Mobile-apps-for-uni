@@ -28,3 +28,15 @@ class Db:
         if result:
             return True, result[0]
         return False, -1
+
+    def get_list_data(self):
+        mycursor = self.mydb.cursor()
+        query = "SELECT * FROM info"
+        mycursor.execute(query)
+        result = mycursor.fetchall()
+        if not result:
+            self.logger.warning("No data found!")
+            return []
+        lst = [{'text': tup[1], 'importance': tup[2]} for tup in result]
+        self.logger.info("Returning list: {}".format(lst))
+        return lst

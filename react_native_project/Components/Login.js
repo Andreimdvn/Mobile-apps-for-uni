@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {StyleSheet, View, Image, Text, KeyboardAvoidingView, TextInput, Button} from 'react-native';
+import { AsyncStorage } from "react-native"
 import {NavigationActions, StackActions} from "react-navigation";
 
 
@@ -49,37 +50,77 @@ export class LoginScreen extends React.Component {
         )
     }
 
-    loginPressed() {
+    async loginPressed() {
         console.log(this.state);
-        fetch('http://10.220.16.45:16000/api/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                "user": this.state['user_input'],
-                "password": this.state['password_input'],
+        let loginToken = '';
+        let getLoginToken = async () => {
+            try {
+                console.log("Will get token from local storage!");
+                loginToken = await AsyncStorage.getItem('login_token') || '';
+            } catch (error) {
+                console.log("Error at login get token!");
+            }
+        };
+        await getLoginToken();
+        if (loginToken !== '') {
+            console.log("We have login_token!");
+            console.log(loginToken);
+            this.props.navigation.dispatch(StackActions.reset({
+                index: 0,
+                actions: [
+                    NavigationActions.navigate({routeName: 'Details'})
+                ],
+            }));
+            return;
+        }
+        else
+        {
+            console.log("No token in local storage!");
+        }
+
+        console.log("Sending login req!");
+        try {
+            fetch('http://10.220.16.45:16000/api/login', {
+                method: 'POST',
+                timeout: 5,
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    "user": this.state['user_input'],
+                    "password": this.state['password_input'],
+                })
             })
-        })
-            .then((response) => response.json())
-            .then((responseJson) => {
-                if (responseJson['status'] === 'True')
-                {
-                    this.props.navigation.dispatch(StackActions.reset({
-                        index: 0,
-                        actions: [
-                            NavigationActions.navigate({ routeName: 'Details' })
-                        ],
-                    }))
-                }
-                else
-                {
-                    alert("Invalid credentials");
-                }
-            })
-            .catch((error) => {
-                console.error(error);
-            });
+                .then((response) => response.json())
+                .then(async (responseJson) => {
+                    let loginToken = responseJson['token'];
+                    if (responseJson['status'] === 'True') {
+                        let saveLoginToken = async loginToken => {
+                            try {
+                                console.log("Will add login token to local storage!");
+                                await AsyncStorage.setItem('login_token', loginToken);
+                                console.log("Added login_token to local storage!");
+                            } catch (error) {
+                                console.log("asyncstorage error at save login_token")
+                            }
+                        };
+                        await saveLoginToken();
+                        this.props.navigation.dispatch(StackActions.reset({
+                            index: 0,
+                            actions: [
+                                NavigationActions.navigate({routeName: 'Details'})
+                            ],
+                        }))
+                    } else {
+                        alert("Invalid credentials");
+                    }
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }catch (error){
+            alert("Network error.")
+        }
     };
 }
 
