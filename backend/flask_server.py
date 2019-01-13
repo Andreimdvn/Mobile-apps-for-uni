@@ -57,6 +57,12 @@ class FlaskServer:
         return json.dumps({'status': str(status), 'token': str(token)})
 
     def list_data(self):
+        request_data = request.get_json()
         self.logger.info("Got request to retrieve list data!")
-
-        return json.dumps(self.db.get_list_data())
+        data = self.db.get_list_data()
+        if request_data:
+            self.logger.debug("Will return json dictionary")
+            return json.dumps({"data": data})
+        else:
+            self.logger.debug("Will return json list")
+            return json.dumps(data)

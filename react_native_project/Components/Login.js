@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+limport React, {Component} from 'react';
 import {StyleSheet, View, Image, Text, KeyboardAvoidingView, TextInput, Button} from 'react-native';
 import { AsyncStorage } from "react-native"
 import {NavigationActions, StackActions} from "react-navigation";
