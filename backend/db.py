@@ -26,8 +26,8 @@ class Db:
         result = mycursor.fetchone()
         self.logger.debug("Checking user {}. Result: {}".format(user, result))
         if result:
-            return True, result[0]
-        return False, -1
+            return True, result[0], result[3]
+        return False, -1, None
 
     def get_list_data(self):
         mycursor = self.mydb.cursor()

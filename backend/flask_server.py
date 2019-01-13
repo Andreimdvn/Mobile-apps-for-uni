@@ -1,6 +1,9 @@
 import json
 import logging
+import threading
+import time
 
+import emails
 from flask import Flask, request
 from flask_socketio import SocketIO
 
@@ -51,9 +54,11 @@ class FlaskServer:
     def login(self):
         request_data = request.get_json()
         self.logger.info("Got login request. Data: {}".format(request_data))
-        status, token = self.db.login_user(request_data["user"], request_data["password"])
+        status, token, email= self.db.login_user(request_data["user"], request_data["password"])
         self.logger.debug("Login status: {}".format(status))
-
+        if status:
+            ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
+            threading.Thread(target=self.__send_login_email, args=(email, ip)).start()
         return json.dumps({'status': str(status), 'token': str(token)})
 
     def list_data(self):
@@ -66,3 +71,34 @@ class FlaskServer:
         else:
             self.logger.debug("Will return json list")
             return json.dumps(data)
+
+    def __send_login_email(self, email, ip):
+        """
+        Send a validation email (tries 2 times) to a user to notice them to activate the account
+        :param activation_hash: generated hash for activation
+        :param email: the email were the activation link will be sent
+        :return:
+        """
+        self.logger.info("Will send email to {}".format(email))
+
+        self.logger.info("Got ip of req: {}".format(ip))
+        url = 'http://0.0.0.0:16000/api/login'
+
+        for i in range(5):
+            m = emails.Message(
+                html='<html>New login on from ip <a href="%s"></a></html>' % (ip, ),
+                subject='Keep it app. New login!',
+                mail_from='facultaubb@gmail.com')
+
+            r = m.send(render={'url': url,
+                               'hash': "123"},
+                       smtp={'host': 'smtp.gmail.com',
+                             'tls': True,
+                             'user': 'facultaubb@gmail.com',
+                             'password': 'P@rolamea'},
+                       to=email)
+            if r.status_code not in (250,) and i != 1:
+                self.logger.error("Email sending error: {}".format(r.status_code))
+                time.sleep(5)
+            else:
+                break
