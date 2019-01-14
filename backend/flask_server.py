@@ -86,19 +86,18 @@ class FlaskServer:
 
         for i in range(5):
             m = emails.Message(
-                html='<html>New login on from ip <a href="%s"></a></html>' % (ip, ),
+                html='<html>New login on from ip <a href="%s"></a></html>' % (ip,),
                 subject='Keep it app. New login!',
                 mail_from='facultaubb@gmail.com')
 
-            r = m.send(render={'url': url,
-                               'hash': "123"},
-                       smtp={'host': 'smtp.gmail.com',
+            r = m.send(smtp={'host': 'smtp.gmail.com',
                              'tls': True,
                              'user': 'facultaubb@gmail.com',
                              'password': 'P@rolamea'},
                        to=email)
             if r.status_code not in (250,) and i != 1:
-                self.logger.error("Email sending error: {}".format(r.status_code))
+                self.logger.info("Email sending error: {}".format(r.status_code))
                 time.sleep(5)
+
             else:
                 break
