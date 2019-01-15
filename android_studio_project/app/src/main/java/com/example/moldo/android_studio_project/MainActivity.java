@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        String url = "http://10.220.16.45:16000/api/login";
+        String url = "http://192.168.43.242:16000/api/login";
 
         EditText username_edit = (EditText) findViewById(R.id.editText2);
         EditText password_edit  = (EditText) findViewById(R.id.editText);

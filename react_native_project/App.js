@@ -8,7 +8,7 @@ import { AsyncStorage } from "react-native"
 class DetailsScreen extends React.Component {
         async fetchListData() {
         try {
-            let response = await fetch('http://localhost:16000/api/listdata',
+            let response = await fetch('http://192.168.43.242:16000/api/listdata',
             { method: 'POST',
               headers: {
              'Content-Type': 'application/json',
@@ -29,7 +29,6 @@ class DetailsScreen extends React.Component {
             list_data: []
         };
         this.componentDidMount = this.componentDidMount.bind(this); //so i can access this in the method
-
     }
 
     async componentDidMount() {
@@ -57,6 +56,7 @@ class DetailsScreen extends React.Component {
         console.log("Request to getch list data");
         let fetched_list_data =  await this.fetchListData();
         try {
+            console.log("Fetched list data:" + fetched_list_data);
             this.setState({list_data: fetched_list_data});
             let saveListData = async  wtf=> {
                 try {

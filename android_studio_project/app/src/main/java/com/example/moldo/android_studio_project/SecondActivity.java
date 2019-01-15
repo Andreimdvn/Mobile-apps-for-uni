@@ -38,7 +38,7 @@ public class SecondActivity extends AppCompatActivity {
 
     private void request_new_data()
     {
-        String url = "http://10.220.16.45:16000/api/listdata";
+        String url = "http://192.168.43.242:16000/api/listdata2";
         JSONObject jsonReq= new JSONObject();
         try {
             jsonReq.put("arr", "arr");

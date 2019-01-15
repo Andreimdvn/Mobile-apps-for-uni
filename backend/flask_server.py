@@ -45,6 +45,7 @@ class FlaskServer:
         self.flask_app.add_url_rule('/test', 'test_request', self.test_request, methods=['GET', 'POST'])
         self.flask_app.add_url_rule('/api/login', 'login', self.login, methods=['POST'])
         self.flask_app.add_url_rule('/api/listdata', 'listdata', self.list_data, methods=['POST'])
+        self.flask_app.add_url_rule('/api/listdata2', 'listdata2', self.list_data2, methods=['POST'])
 
     def test_request(self):
         self.request_data = request.get_json()
@@ -62,6 +63,12 @@ class FlaskServer:
         return json.dumps({'status': str(status), 'token': str(token)})
 
     def list_data(self):
+        self.logger.info("Got request to retrieve list data!")
+        data = self.db.get_list_data()
+        self.logger.debug("Will return json dictionary")
+        return json.dumps(data)
+
+    def list_data2(self):
         request_data = request.get_json()
         self.logger.info("Got request to retrieve list data!")
         data = self.db.get_list_data()

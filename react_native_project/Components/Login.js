@@ -1,4 +1,4 @@
-limport React, {Component} from 'react';
+import React, {Component} from 'react';
 import {StyleSheet, View, Image, Text, KeyboardAvoidingView, TextInput, Button} from 'react-native';
 import { AsyncStorage } from "react-native"
 import {NavigationActions, StackActions} from "react-navigation";
@@ -80,9 +80,8 @@ export class LoginScreen extends React.Component {
 
         console.log("Sending login req!");
         try {
-            fetch('http://localhost:16000/api/login', {
+            fetch('http://192.168.43.242:16000/api/login', {
                 method: 'POST',
-                timeout: 5,
                 headers: {
                     'Content-Type': 'application/json',
                 },
