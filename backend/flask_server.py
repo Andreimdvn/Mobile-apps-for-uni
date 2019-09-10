@@ -99,8 +99,8 @@ class FlaskServer:
 
             r = m.send(smtp={'host': 'smtp.gmail.com',
                              'tls': True,
-                             'user': 'facultaubb@gmail.com',
-                             'password': 'P@rolamea'},
+                             'user': '',
+                             'password': ''},
                        to=email)
             if r.status_code not in (250,) and i != 1:
                 self.logger.info("Email sending error: {}".format(r.status_code))
