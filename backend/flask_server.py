@@ -95,7 +95,7 @@ class FlaskServer:
             m = emails.Message(
                 html='<html>New login on from ip <a href="%s"></a></html>' % (ip,),
                 subject='Keep it app. New login!',
-                mail_from='facultaubb@gmail.com')
+                mail_from='')
 
             r = m.send(smtp={'host': 'smtp.gmail.com',
                              'tls': True,
